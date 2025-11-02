@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DNS Lookup History</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* small local styles for history page buttons */
+    .history-actions { display:flex; gap:10px; align-items:center; margin:12px 0; }
+    .btn { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:600; }
+    .btn.ghost { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); }
+    .btn.danger { background:transparent; border:1px solid rgba(255,60,60,0.18); color:#ffb4b4; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.03); text-align:left; }
+    td .small { color: #9fb3d1; font-size:12px; margin-left:8px; }
+    .action-btn { background:transparent;border:0;cursor:pointer;color:#ff9b9b;font-weight:700 }
+    .controls-row { display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <div class="page" style="padding:28px;">
+    <header class="header">
+      <h1>DNS Lookup History</h1>
+      <p class="sub">Saved in this browser (localStorage) — permanent until cleared</p>
+    </header>
+
+    <div class="card" style="padding:16px;">
+      <div class="controls-row">
+        <div class="history-actions">
+          <button id="exportBtn" class="btn primary">⬇ Export CSV</button>
+          <button id="clearBtn" class="btn danger">🗑 Clear All History</button>
+          <button id="backBtn" class="btn ghost" onclick="location.href='index.html'">← Back</button>
+        </div>
+
+        <div style="color:var(--muted); font-size:13px;">
+          Showing up to <strong>100</strong> latest records
+        </div>
+      </div>
+
+      <div style="overflow:auto; margin-top:12px;">
+        <table id="historyTable" role="grid">
+          <thead>
+            <tr><th>Timestamp</th><th>Domain</th><th>IP Address</th><th>Source</th><th></th></tr>
+          </thead>
+          <tbody id="historyBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer style="margin-top:16px;color:var(--muted)">Made with ❤ — DNS Resolver</footer>
+  </div>
+
+<script>
+// ------------------ History management (localStorage) ------------------
+const STORAGE_KEY = "dnsHistory";
+const MAX_RECORDS = 100;
+
+function readHistory() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error("Failed to read history:", e);
+    return [];
+  }
+}
+
+function writeHistory(arr) {
+  try {
+    // ensure we store only latest MAX_RECORDS (keep newest at end)
+    const trimmed = arr.slice(-MAX_RECORDS);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  } catch (e) {
+    console.error("Failed to write history:", e);
+  }
+}
+
+function clearAllHistory() {
+  if (!confirm("Clear all history? This cannot be undone.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderHistory();
+}
+
+function deleteHistoryItem(indexFromNewest) {
+  // indexFromNewest: 0 = newest, 1 = second-newest, etc.
+  const arr = readHistory();
+  // arr stores oldest → newest; convert:
+  const idx = arr.length - 1 - indexFromNewest;
+  if (idx < 0 || idx >= arr.length) return;
+  arr.splice(idx, 1);
+  writeHistory(arr);
+  renderHistory();
+}
+
+function exportCSV() {
+  const arr = readHistory();
+  if (!arr.length) {
+    alert("No history to export.");
+    return;
+  }
+  // CSV header
+  const rows = [["timestamp","domain","ip","source"], ...arr.map(r => [r.timestamp, r.domain, r.ip, r.source])];
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dns_history_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Render table
+function renderHistory() {
+  const body = document.getElementById("historyBody");
+  const arr = readHistory(); // oldest -> newest
+  body.innerHTML = "";
+  if (!arr.length) {
+    body.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted)">No history found</td></tr>`;
+    return;
+  }
+
+  // show newest first
+  for (let i = arr.length - 1; i >= 0; i--) {
+    const item = arr[i];
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item.timestamp}</td>
+      <td>${item.domain}</td>
+      <td>${item.ip}</td>
+      <td>${item.source}</td>
+      <td><button class="action-btn" onclick="deleteHistoryItem(${arr.length - 1 - i})">✖</button></td>
+    `;
+    body.appendChild(row);
+  }
+}
+
+// Wire buttons
+document.getElementById("exportBtn").addEventListener("click", exportCSV);
+document.getElementById("clearBtn").addEventListener("click", clearAllHistory);
+document.getElementById("backBtn").addEventListener("click", ()=> location.href = "index.html");
+
+// initial render
+renderHistory();
+</script>
+</body>
+</html>

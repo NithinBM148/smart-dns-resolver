@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DNS Result</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h2>DNS Lookup Result</h2>
+    <p id="resultText">Loading...</p>
+    <a href="index.html" class="back-btn">🔙 Back to Resolver</a>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const domain = params.get("domain");
+    const ip = params.get("ip");
+    const cached = params.get("cached");
+
+    if (domain && ip) {
+        document.getElementById("resultText").textContent =
+            `Domain: ${domain} → IP: ${ip} (${cached === "true" ? "From Cache" : "New Lookup"})`;
+    } else {
+        document.getElementById("resultText").textContent =
+            "⚠️ No result data received.";
+    }
+</script>
+
+</body>
+</html>

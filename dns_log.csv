@@ -1,0 +1,14 @@
+timestamp,domain,ip,source
+2025-11-02 22:45:26,microsoft.com,13.107.213.48,resolved
+2025-11-02 22:56:44,google.com,142.250.182.78,resolved
+2025-11-02 22:57:11,youtube.com,142.251.223.174,resolved
+2025-11-02 23:00:23,dell.com,143.166.136.12,resolved
+2025-11-02 23:01:17,lenova.com,86.105.245.69,resolved
+2025-11-02 23:20:10,html.com,172.67.183.132,resolved
+2025-11-02 23:20:24,css.com,208.91.197.27,resolved
+2025-11-02 23:22:59,javascript.com,104.17.248.120,resolved
+2025-11-02 23:30:19,hp.com,3.163.224.5,resolved
+2025-11-02 23:30:52,github.com,20.207.73.82,resolved
+2025-11-02 23:31:15,chatgpt.com,172.64.155.209,resolved
+2025-11-03 00:02:38,duckduckgo.com,20.204.244.192,resolved
+2025-11-03 00:03:27,amazone.com,75.2.51.62,resolved

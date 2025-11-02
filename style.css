@@ -1,0 +1,38 @@
+:root{
+  --bg:#061026;
+  --card:#07122b;
+  --muted:#9fb3d1;
+  --accent1:#6b5cff;
+  --accent2:#00d4ff;
+  --white:#eaf4ff;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:linear-gradient(180deg,#041024 0%, #07162a 100%);color:var(--white)}
+.page{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 16px}
+.header{max-width:900px;text-align:center;margin-bottom:18px}
+.header h1{font-size:28px;font-weight:800}
+.header .sub{color:var(--muted);margin-top:6px;font-size:13px}
+.card{width:100%;max-width:880px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 12px 30px rgba(2,6,23,0.6)}
+.row{display:flex;gap:12px;align-items:center}
+.input-wrap{position:relative;flex:1}
+#domainInput{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white);outline:none;font-size:15px}
+#domainInput:focus{box-shadow:0 8px 30px rgba(107,92,255,0.08);transform:translateY(-1px)}
+.buttons{display:flex;gap:8px}
+.btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#041024}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+.result{margin-top:18px}
+.result h3{font-size:14px;margin-bottom:8px;color:var(--white)}
+.output{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.03);min-height:44px;color:#d6e8ff}
+.hint{margin-top:8px;color:var(--muted);font-size:13px}
+
+/* Dropdown / suggestions */
+.dropdown{position:absolute;left:0;right:0;top:calc(100% + 8px);background:#07122b;border-radius:8px;padding:6px;border:1px solid rgba(255,255,255,0.04);max-height:300px;overflow:auto;z-index:40;backdrop-filter:blur(6px)}
+.dropdown li{list-style:none;padding:10px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.dropdown li:hover{background:rgba(255,255,255,0.02)}
+.suggestion-title{font-weight:700;color:#cfe9ff}
+.suggestion-domain{color:var(--muted);font-size:13px}
+
+/* Responsive */
+@media(max-width:720px){.row{flex-direction:column;align-items:stretch}.buttons{width:100%;display:flex}.btn{flex:1}}

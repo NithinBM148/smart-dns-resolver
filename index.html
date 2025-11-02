@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DNS Resolver Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <h1>DNS Resolver Tool</h1>
+      <p class="sub">Resolve domains & view recent lookups</p>
+    </header>
+
+    <main class="card">
+      <div class="row">
+        <div class="input-wrap">
+          <input id="domainInput" type="text" placeholder="Enter domain e.g. google.com" autocomplete="off"/>
+          <ul id="suggestionsDropdown" class="dropdown" hidden></ul>
+        </div>
+
+        <div class="buttons">
+          <button id="resolveBtn" class="btn primary">Resolve</button>
+          <button id="historyBtn" class="btn ghost" onclick="location.href='history.html'">View History</button>
+        </div>
+      </div>
+
+      <section class="result">
+        <h3>Result</h3>
+        <div id="output" class="output">No query yet — enter a domain and press Resolve.</div>
+        <div class="hint">Result will clear after 60 seconds but is saved to History.</div>
+      </section>
+    </main>
+
+    <footer class="footer">Made with ❤ — DNS Resolver</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
