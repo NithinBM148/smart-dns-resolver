@@ -25,7 +25,7 @@ def normalize_csv():
 
     with open(LOG_FILE, "r") as f:
         reader = csv.reader(f)
-        headers = next(reader)
+        _ = next(reader, None)
 
         for row in reader:
             # Convert old format (domain, ip) → full format
@@ -92,6 +92,7 @@ def resolve_domain():
     history = load_history()
     for entry in history[::-1]:
         if entry["domain"] == domain:
+            log_lookup(domain, entry["ip"], "cache_hit")
             return jsonify({
                 "domain": domain,
                 "ip": entry["ip"],
