@@ -116,6 +116,16 @@ function exportCSV() {
 }
 
 // Render table
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[ch]));
+}
+
 function renderHistory() {
   const body = document.getElementById("historyBody");
   const arr = readHistory(); // oldest -> newest
@@ -130,10 +140,10 @@ function renderHistory() {
     const item = arr[i];
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${item.timestamp}</td>
-      <td>${item.domain}</td>
-      <td>${item.ip}</td>
-      <td>${item.source}</td>
+      <td>${escapeHtml(item.timestamp)}</td>
+      <td>${escapeHtml(item.domain)}</td>
+      <td>${escapeHtml(item.ip)}</td>
+      <td>${escapeHtml(item.source)}</td>
       <td><button class="action-btn" onclick="deleteHistoryItem(${arr.length - 1 - i})">✖</button></td>
     `;
     body.appendChild(row);
